@@ -1,6 +1,6 @@
 import express from "express";
-import nodemailer from "nodemailer";
 import cors from "cors";
+import { Resend } from "resend";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -8,39 +8,18 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",              // dev
-      "https://brightmxta-bdkh.vercel.app", // vercel link
-      "https://brightmxta.com"              // custom domain
-    ],
-  })
-);
-
+app.use(cors({ origin: ["http://localhost:5173", "https://brightmxta.com","https://brightmxta-bdkh.vercel.app"] }));
 app.use(express.json());
 
-// Health check
-app.get("/", (req, res) => {
-  res.send("✅ Brightmxta backend is running!");
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Email route
 app.post("/send", async (req, res) => {
   const { name, email, message } = req.body;
 
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
+    await resend.emails.send({
+      from: "Brightmxta <onboarding@resend.dev>", // must be verified
+      to: process.env.EMAIL_TO,
       subject: `New Message from ${name}`,
       text: `From: ${email}\n\n${message}`,
       replyTo: email,
