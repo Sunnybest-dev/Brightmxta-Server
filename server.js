@@ -8,9 +8,16 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({
-  origin: ["http://localhost:5173", "https://brightmxta.com", "https://brightmxta-bdkh.vercel.app/"], // adjust frontend URLs
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",              // dev
+      "https://brightmxta-bdkh.vercel.app", // vercel link
+      "https://brightmxta.com"              // custom domain
+    ],
+  })
+);
+
 app.use(express.json());
 
 // Health check
