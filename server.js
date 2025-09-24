@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: ["http://localhost:5173", "https://brightmxta.com"], // adjust frontend URLs
+  origin: ["http://localhost:5173", "https://brightmxta.com", "https://brightmxta-bdkh.vercel.app/"], // adjust frontend URLs
 }));
 app.use(express.json());
 
